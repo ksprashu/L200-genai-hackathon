@@ -37,7 +37,7 @@ class GeminiAPI(BaseModel):
 
         # start chat interface on model
         self.chat_history_writer = []
-        self.chat_model = self.model.start_chat(history=self.chat_history_writer)
+        self.chat_model = self.model.start_chat()
 
 
     # override method from BaseModel
@@ -46,12 +46,10 @@ class GeminiAPI(BaseModel):
         logger.debug(f"Prompt: {prompt}")
         response = self.chat_model.send_message(prompt)
         logger.debug(f"Response: {response}")
-        self.chat_history_writer.extend(
-            [
+        self.chat_history_writer.extend([
                 {"role": "user", "content": prompt},
                 {"role": "model", "content": response.text},
-            ]
-        )
+            ])
 
         return {
             "output": response.text,
